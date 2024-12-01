@@ -40,7 +40,7 @@ double Expression::appliquerOperateur(double op1, double op2, char operateur)
     case '*': return op1 * op2;
     case '/': if(op2==0) throw runtime_error("Impossible de diviser par 0");
               return op1 / op2;
-    default: throw invalid_argument("Opérateur non valide");
+    default: throw invalid_argument("OpÃ©rateur non valide");
     }
 }
 
@@ -55,8 +55,8 @@ int Expression::priorite(char op)
 bool Expression::verifierExpression(const string& expr)
 {
     Stack<char> pile(10);
-    bool Operande = false;  // Indique si le dernier caractère est un opérande
-    bool Operateur = false; // Indique si le dernier caractère est un opérateur
+    bool Operande = false;  // Indique si le dernier caractÃ¨re est un opÃ©rande
+    bool Operateur = false; // Indique si le dernier caractÃ¨re est un opÃ©rateur
 
     for (int i = 0; i < expr.length(); i++) {
         char c = expr[i];
@@ -64,45 +64,45 @@ bool Expression::verifierExpression(const string& expr)
         // Ignorer les espaces
         if (isspace(c)) continue;
 
-        // Si c'est une parenthèse ouvrante, empiler
+        // Si c'est une parenthÃ¨se ouvrante, empiler
         if (c == '(' || c == '{' || c == '[') {
             pile.push(c);
             Operande = false;
             Operateur = false;
         }
-        // Si c'est une parenthèse fermante, vérifier l'équilibre
+        // Si c'est une parenthÃ¨se fermante, vÃ©rifier l'Ã©quilibre
         else if (c == ')' || c == '}' || c == ']') {
             if (pile.IsEmpty() ||
                 (c == ')' && pile.Sommet() != '(') ||
                 (c == '}' && pile.Sommet() != '{') ||
                 (c == ']' && pile.Sommet() != '[')) {
-                return false;  // Parenthèse mal appariée
+                return false;  // ParenthÃ¨se mal appariÃ©e
             }
             pile.pop();
             Operande = true;
             Operateur = false;
         }
-        // Si c'est un opérande (chiffre ou lettre)
+        // Si c'est un opÃ©rande (chiffre)
         else if (estOperande(c)) {
 
             Operande = true;
             Operateur = false;
         }
-        // Si c'est un opérateur
+        // Si c'est un opÃ©rateur
         else if (estOperateur(c)) {
             if (!Operande) {
-                return false;  // Opérateur sans opérande avant lui 
+                return false;  // OpÃ©rateur sans opÃ©rande avant lui 
             }
             Operateur = true;
             Operande = false;
         }
-        // Si c'est un caractère invalide
+        // Si c'est un caractÃ¨re invalide
         else {
             return false;  // Expression invalide
         }
     }
 
-    // Vérifier si la pile est vide et que l'expression ne se termine pas par un opérateur
+    // VÃ©rifier si la pile est vide et que l'expression ne se termine pas par un opÃ©rateur
     return pile.IsEmpty() && Operande;
 }
 
@@ -118,11 +118,11 @@ double Expression::evaluer(const string& expression)
         // Ignorer les espaces
         if (isspace(c)) continue;
 
-        // Si c'est une parenthèse, crochet ou accolade ouvrante
+        // Si c'est une parenthÃ¨se, crochet ou accolade ouvrante
         if (estParentheseOuvrante(c)) {
             pileOperateurs.push(c);
         }
-        // Si c'est une parenthèse, crochet ou accolade fermante
+        // Si c'est une parenthÃ¨se, crochet ou accolade fermante
         else if (estParentheseFermante(c)) {
             while (!pileOperateurs.IsEmpty() && !estParentheseOuvrante(pileOperateurs.Sommet())) {
                 char op = pileOperateurs.Sommet();
@@ -133,26 +133,26 @@ double Expression::evaluer(const string& expression)
                 pileOperandes.pop();
                 pileOperandes.push(appliquerOperateur(op1, op2, op));
             }
-            // Assurez-vous de retirer l'élément ouvrant correspondant
+           
             if (!pileOperateurs.IsEmpty()) {
                 char ouvrante = pileOperateurs.Sommet();
                 pileOperateurs.pop();
                 if (!correspondParenthese(ouvrante, c)) {
-                    throw invalid_argument("Parenthèses non correspondantes");
+                    throw invalid_argument("ParenthÃ¨ses non correspondantes");
                 }
             }
         }
-        // Si c'est un chiffre, on l'ajoute à la pile des opérandes
+        // Si c'est un chiffre, on l'ajoute Ã  la pile des opÃ©randes
         else if (isdigit(c)) {
             double operand = 0;
             while (i < expression.length() && isdigit(expression[i])) {
                 operand = operand * 10 + (expression[i] - '0');
                 ++i;
             }
-            --i;  // Reculer d'un caractère après la boucle
+            --i;  // Reculer d'un caractÃ¨re aprÃ¨s la boucle
             pileOperandes.push(operand);
         }
-        // Si c'est un opérateur
+        // Si c'est un opÃ©rateur
         else if (estOperateur(c)) {
             while (!pileOperateurs.IsEmpty() && priorite(pileOperateurs.Sommet()) >= priorite(c)) {
                 char op = pileOperateurs.Sommet();
@@ -167,7 +167,7 @@ double Expression::evaluer(const string& expression)
         }
     }
 
-    // Appliquer les restes des opérateurs
+    // Appliquer les restes des opÃ©rateurs
     while (!pileOperateurs.IsEmpty()) {
         char op = pileOperateurs.Sommet();
         pileOperateurs.pop();
